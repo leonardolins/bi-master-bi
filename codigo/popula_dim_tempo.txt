@@ -1,0 +1,17 @@
+insert into dim_tempo
+(
+
+select to_number(to_char(datum,'yyyymmdd'), '99999999') as sk_tempo,
+datum as nk_data,
+extract (year from datum) as nr_ano,
+'T' || to_char(datum, 'q') as nm_trimestre,
+to_char(datum, '"T"q/yyyy') as nr_ano_trimenstre,
+extract(month from datum) as nr_mes,
+to_char(datum, 'tmMonth') as nm_mes,
+to_char(datum, 'yyyy/mm') as nr_ano_nr_mes
+from (
+	select generate_series ( '2010-01-01'::timestamp, '2032-12-01'::timestamp, '1 month'::interval) datum
+	
+) dq
+order by 1
+	)
