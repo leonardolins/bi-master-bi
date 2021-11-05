@@ -599,7 +599,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>G:\Users\Administrator\Desktop\Dados Estatísticos.csv</filename>
+    <filename>D:\Projeto BI\Dados_Estatisticos\Novo\Dados Estatísticos.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>

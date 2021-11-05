@@ -450,8 +450,40 @@
     <index_tablespace/>
     <attributes>
       <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
         <code>PORT_NUMBER</code>
         <attribute>5432</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
       </attribute>
     </attributes>
   </connection>
@@ -605,7 +637,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>G:\Users\Administrator\Desktop\Dados Estatísticos.csv</filename>
+    <filename>D:\Projeto BI\Dados_Estatisticos\Novo\Dados Estatísticos.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
@@ -1064,11 +1096,11 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>${Internal.Entry.Current.Directory}/Fontes de Dados/Enriquecimento_Aeroporto.csv</filename>
+    <filename>D:\Projeto BI\Dados_Estatisticos\Enriquecimento_Aeroporto_v2.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
-    <separator>,</separator>
+    <separator>;</separator>
     <enclosure>"</enclosure>
     <header>Y</header>
     <buffer_size>50000</buffer_size>
@@ -1177,8 +1209,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>480</xloc>
-      <yloc>352</yloc>
+      <xloc>512</xloc>
+      <yloc>384</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1258,8 +1290,8 @@
     </GUI>
   </step>
   <step>
-    <name>troca null por NA</name>
-    <type>IfNull</type>
+    <name>Full join</name>
+    <type>MergeJoin</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -1268,32 +1300,16 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <replaceAllByValue/>
-    <replaceAllMask/>
-    <selectFields>Y</selectFields>
-    <selectValuesType>N</selectValuesType>
-    <setEmptyStringAll>N</setEmptyStringAll>
-    <valuetypes>
-      </valuetypes>
-    <fields>
-      <field>
-        <name>UF</name>
-        <value>NA</value>
-        <mask/>
-        <set_empty_string>N</set_empty_string>
-      </field>
-      <field>
-        <name>REGIAO</name>
-        <value>NA</value>
-        <mask/>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
-    <attributes>
-      <group>
-        <name>sparkTuningParameters</name>
-      </group>
-    </attributes>
+    <join_type>FULL OUTER</join_type>
+    <step1>Sort_dim_aeroporto</step1>
+    <step2>Ordena por Sigla</step2>
+    <keys_1>
+      <key>nk_aeroporto</key>
+    </keys_1>
+    <keys_2>
+      <key>SIGLA</key>
+    </keys_2>
+    <attributes/>
     <cluster_schema/>
     <remotesteps>
       <input>
@@ -1302,8 +1318,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1248</xloc>
-      <yloc>128</yloc>
+      <xloc>960</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1338,40 +1354,6 @@
     <GUI>
       <xloc>752</xloc>
       <yloc>240</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Full join</name>
-    <type>MergeJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <join_type>FULL OUTER</join_type>
-    <step1>Sort_dim_aeroporto</step1>
-    <step2>Ordena por Sigla</step2>
-    <keys_1>
-      <key>nk_aeroporto</key>
-    </keys_1>
-    <keys_2>
-      <key>SIGLA</key>
-    </keys_2>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>960</xloc>
-      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1458,48 +1440,6 @@
     </GUI>
   </step>
   <step>
-    <name>Ordena_Enriquecimento</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory/>
-    <compress>N</compress>
-    <compress_variable/>
-    <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>AEROPORTO DE ORIGEM (SIGLA)</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>624</xloc>
-      <yloc>352</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
     <name>Ordena por Sigla</name>
     <type>SortRows</type>
     <description/>
@@ -1542,8 +1482,8 @@
     </GUI>
   </step>
   <step>
-    <name>Select colunas importantes</name>
-    <type>SelectValues</type>
+    <name>Ordena_Enriquecimento</name>
+    <type>SortRows</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -1552,40 +1492,22 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>SIGLA</name>
-        <rename/>
+        <name>AEROPORTO DE ORIGEM (SIGLA)</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
       </field>
-      <field>
-        <name>NOME</name>
-        <rename/>
-      </field>
-      <field>
-        <name>UF</name>
-        <rename/>
-      </field>
-      <field>
-        <name>REGIAO</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PAIS</name>
-        <rename/>
-      </field>
-      <field>
-        <name>CONTINENTE</name>
-        <rename/>
-      </field>
-      <field>
-        <name>LATITUDE</name>
-        <rename/>
-      </field>
-      <field>
-        <name>LONGITUDE</name>
-        <rename/>
-      </field>
-      <select_unspecified>N</select_unspecified>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -1596,8 +1518,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>816</xloc>
-      <yloc>288</yloc>
+      <xloc>656</xloc>
+      <yloc>384</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1615,35 +1537,27 @@
     <fields>
       <field>
         <name>SIGLA</name>
-        <rename/>
       </field>
       <field>
         <name>NOME</name>
-        <rename/>
       </field>
       <field>
         <name>UF</name>
-        <rename/>
       </field>
       <field>
         <name>REGIAO</name>
-        <rename/>
       </field>
       <field>
         <name>PAIS</name>
-        <rename/>
       </field>
       <field>
         <name>CONTINENTE</name>
-        <rename/>
       </field>
       <field>
         <name>LATITUDE</name>
-        <rename/>
       </field>
       <field>
         <name>LONGITUDE</name>
-        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -1658,6 +1572,58 @@
     <GUI>
       <xloc>1168</xloc>
       <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Select colunas importantes</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>SIGLA</name>
+      </field>
+      <field>
+        <name>NOME</name>
+      </field>
+      <field>
+        <name>UF</name>
+      </field>
+      <field>
+        <name>REGIAO</name>
+      </field>
+      <field>
+        <name>PAIS</name>
+      </field>
+      <field>
+        <name>CONTINENTE</name>
+      </field>
+      <field>
+        <name>LATITUDE</name>
+      </field>
+      <field>
+        <name>LONGITUDE</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>816</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -2119,6 +2085,56 @@ FROM "public".dim_aeroporto
     <GUI>
       <xloc>1328</xloc>
       <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>troca null por NA</name>
+    <type>IfNull</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <replaceAllByValue/>
+    <replaceAllMask/>
+    <selectFields>Y</selectFields>
+    <selectValuesType>N</selectValuesType>
+    <setEmptyStringAll>N</setEmptyStringAll>
+    <valuetypes>
+      </valuetypes>
+    <fields>
+      <field>
+        <name>UF</name>
+        <value>NA</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>REGIAO</name>
+        <value>NA</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+    <attributes>
+      <group>
+        <name>sparkTuningParameters</name>
+      </group>
+    </attributes>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1248</xloc>
+      <yloc>128</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
