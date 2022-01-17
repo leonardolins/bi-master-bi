@@ -1,6 +1,6 @@
-# Trabalho da disciplina de BI
+# Projeto da disciplina de BI
 ## Descrição
-Reposítório para o trabalho da disciplina de BI da pós BI-MASTER da PUC-RIO.
+Reposítório para o projeto da disciplina de BI da pós BI-MASTER da PUC-RIO.
 
 ## Equipe do trabalho:<br />
 Ana Rucos (anarucos@gmail.com)<br />
